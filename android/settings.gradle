@@ -1,0 +1,5 @@
+rootProject.name = 'REgais'
+include ':evotor-egais-api'
+project(':evotor-egais-api').projectDir = new File(rootProject.projectDir, '../node_modules/evotor-egais-api/android')
+
+include ':app'

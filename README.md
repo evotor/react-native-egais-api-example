@@ -1,0 +1,1 @@
+Приложение, демонстрирующее все возможности [evotor-egais-api](https://github.com/evotor/react-native-egais-api)
