@@ -15,4 +15,4 @@ const DateFilterItem = ({value, updateValue}) => (
         </TouchableOpacity>
 );
 
-export default DateFilterItem;
+export default DateFilterItem

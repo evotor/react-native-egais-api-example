@@ -82,7 +82,7 @@ const options = [
                             dateFilter((values) => new TransferToShopQuery().transferDate.greater(values[0], true).and().transferDate.lower(values[1]))
                         ]
                     }, {
-                        name: "В магазин",
+                        name: "В другой магазин",
                         init: () => new WaybillQuery().direction.equal(Direction.IN).and().type.equal(WaybillType.INVOICE_FROM_ME).and().date.greater(getDayAgoDate(), true),
                         filters: [
                             dateFilter((values) => new WaybillQuery().direction.equal(Direction.IN).and().type.equal(WaybillType.INVOICE_FROM_ME).and().date.greater(values[0], true).and().date.lower(values[1]))

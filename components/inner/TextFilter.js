@@ -15,4 +15,4 @@ const TextFilter = ({name, value, updateValue}) => (
     </View>
 );
 
-export default TextFilter;
+export default TextFilter

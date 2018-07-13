@@ -18,9 +18,11 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "evotor-egais-api": "^1.0.0",
+    "abstract-query-builder": "^1.1.8",
+    "evotor-egais-api": "^1.1.0",
     "react": "16.3.0-alpha.1",
     "react-native": "0.54.0",
+    "react-native-navigation": "^2.0.2407",
     "react-navigation": "^1.5.11"
   }
 }

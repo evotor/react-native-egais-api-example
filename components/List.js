@@ -1,5 +1,5 @@
 import React from 'react'
-import {View, FlatList, Modal} from 'react-native'
+import {View, FlatList, Modal, ActivityIndicator, InteractionManager} from 'react-native'
 import Filter from "./inner/Filter"
 import ListItem from "./inner/ListItem"
 import FilterButton from "./inner/FilterButton"
@@ -31,21 +31,22 @@ export default class List extends React.Component {
                 }
             }
         );
-        this.state = {listData: [], filterVisible: false, filterValues: filterValues};
+        this.state = {listIsLoading: true, listData: [], filterIsVisible: false, filterValues: filterValues};
         this.updateFilterValue = this.updateFilterValue.bind(this);
         this.refreshList = this.refreshList.bind(this)
     }
 
-    componentDidMount = () => this.refreshList();
+    componentDidMount = () => InteractionManager.runAfterInteractions(this.refreshList);
 
     async refreshList(base, closeFilter) {
+        this.setState({listIsLoading: true});
         const [query, listData] = [base || this.props.navigation.state.params.init(), []];
         (await query.execute()).forEach(
             (item, i) => listData.push({key: i.toString(), text: JSON.stringify(item)})
         );
-        this.setState({listData});
+        this.setState({listIsLoading: false, listData: listData});
         if (closeFilter) {
-            this.setState({filterVisible: false})
+            this.setState({filterIsVisible: false})
         }
     }
 
@@ -54,8 +55,8 @@ export default class List extends React.Component {
             <Modal
                 animationType='fade'
                 transparent={true}
-                visible={this.state.filterVisible}
-                onRequestClose={() => this.setState({filterVisible: false})}>
+                visible={this.state.filterIsVisible}
+                onRequestClose={() => this.setState({filterIsVisible: false})}>
                 <Filter
                     filters={this.props.navigation.state.params.filters}
                     values={this.state.filterValues}
@@ -63,13 +64,23 @@ export default class List extends React.Component {
                     refreshList={this.refreshList}/>
             </Modal>
             <View style={[styles.filterButtonTop, styles.white]}/>
+            {this._renderList()}
+            <FilterButton onPress={() => this.setState({filterIsVisible: true})}/>
+        </View>;
+
+    _renderList = () =>
+        this.state.listIsLoading ?
+            <View style={[styles.container, styles.center]}>
+                <View style={[styles.container, styles.row, styles.center]}>
+                    <ActivityIndicator size="large" color="#ffffff"/>
+                </View>
+            </View>
+            :
             <FlatList
                 style={styles.container}
                 data={this.state.listData}
                 renderItem={this._renderItem}
-                ItemSeparatorComponent={this._renderSeparator}/>
-            <FilterButton onPress={() => this.setState({filterVisible: true})}/>
-        </View>;
+                ItemSeparatorComponent={this._renderSeparator}/>;
 
     _renderItem = ({item}) => <ListItem text={item.text}/>;
 
